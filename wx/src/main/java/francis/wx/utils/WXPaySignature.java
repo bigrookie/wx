@@ -2,10 +2,12 @@ package francis.wx.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -16,7 +18,9 @@ import java.util.Map;
 public class WXPaySignature {
 
     private final static Logger logger = LoggerFactory.getLogger(WXPaySignature.class);
-	
+
+    private static final String ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.!~*'()";
+
     /**
      * 签名算法
      * @param o 要参与签名的数据对象
@@ -121,5 +125,44 @@ public class WXPaySignature {
         }
         return map;
     }
-    
+
+
+    public static String encodeURIComponent(String input) {
+        if (StringUtils.isEmpty(input)) {
+            return input;
+        }
+
+        int l = input.length();
+        StringBuilder o = new StringBuilder(l * 3);
+        try {
+            for (int i = 0; i < l; i++) {
+                String e = input.substring(i, i + 1);
+                if (ALLOWED_CHARS.indexOf(e) == -1) {
+                    byte[] b = e.getBytes("utf-8");
+                    o.append(getHex(b));
+                    continue;
+                }
+                o.append(e);
+            }
+            return o.toString();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return input;
+    }
+
+    private static String getHex(byte buf[]) {
+        StringBuilder o = new StringBuilder(buf.length * 3);
+        for (int i = 0; i < buf.length; i++) {
+            int n = buf[i] & 0xff;
+            o.append("%");
+            if (n < 0x10) {
+                o.append("0");
+            }
+            o.append(Long.toString(n, 16).toUpperCase());
+        }
+        return o.toString();
+    }
+
+
 }

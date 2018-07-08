@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+
+
+wx:
+  common:
+    appID: "wx0d1e9d47437149de"
+    appsecret: "5dc43c5bb2126e35febd51d92517fb23"
+    transferUrl: "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers"
+    tokenUrl: "https://api.weixin.qq.com/cgi-bin/token"
+    grant_type: "client_credential"
+    accessTokenUrl: "https://api.weixin.qq.com/sns/oauth2/access_token"
+    userInfoUrl: "https://api.weixin.qq.com/sns/userinfo"
+    freshTokenUrl: "https://api.weixin.qq.com/sns/oauth2/refresh_token"
+    menuUrl: "https://api.weixin.qq.com/cgi-bin/menu/create"
+    redirectUrl: "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx0d1e9d47437149de&redirect_uri=http://jiangmouren.cn/callback2&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect"
